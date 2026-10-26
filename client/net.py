@@ -1,5 +1,4 @@
-"""net.py - Conexion de red del cliente (sockets Berkeley, TCP).
-
+"""Conexion de red del cliente (sockets Berkeley, TCP).
 Desacoplado de la interfaz: solo se encarga de enviar y recibir mensajes.
 """
 import socket
@@ -14,11 +13,11 @@ class Connection:
         self._running = True
 
     def send(self, msg_type, payload=b""):
-        """Envia un mensaje al servidor."""
+        #Envia un mensaje al servidor.
         self.sock.sendall(protocol.encode(msg_type, payload))
 
     def _recv_exact(self, n):
-        """Lee exactamente n bytes (TCP puede fragmentar)."""
+        #Lee exactamente n bytes (TCP puede fragmentar).
         data = b""
         while len(data) < n:
             chunk = self.sock.recv(n - len(data))
@@ -28,7 +27,7 @@ class Connection:
         return data
 
     def recv(self):
-        """Lee un mensaje completo. Devuelve (tipo, payload) o None si se cerro."""
+        #Lee un mensaje completo. Devuelve (tipo, payload) o None si se cerro.
         header = self._recv_exact(3)
         if header is None:
             return None
@@ -39,7 +38,7 @@ class Connection:
         return msg_type, payload
 
     def listen(self, on_message):
-        """Corre un hilo que llama on_message(tipo, payload) por cada mensaje."""
+        #Corre un hilo que llama on_message(tipo, payload) por cada mensaje.
         def loop():
             while self._running:
                 msg = self.recv()

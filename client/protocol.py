@@ -1,4 +1,4 @@
-"""protocol.py - Codec binario MyAppGameProtocol (lado cliente).
+"""Codec binario MyAppGameProtocol (lado cliente).
 
 Mismo formato que el servidor en C:
     [type:1 byte][length:2 bytes big-endian][payload:length bytes]
@@ -27,17 +27,17 @@ BOARD_H = 480
 
 
 def encode(msg_type, payload=b""):
-    """Arma los bytes de un mensaje listos para enviar."""
+    #Arma los bytes de un mensaje listos para enviar.
     return struct.pack(">BH", msg_type, len(payload)) + payload
 
 
 def decode_header(header):
-    """Devuelve (tipo, longitud) a partir de los 3 bytes de cabecera."""
+    #Devuelve (tipo, longitud) a partir de los 3 bytes de cabecera.
     return struct.unpack(">BH", header)
 
 
 def unpack_state(payload):
-    """Convierte el payload de STATE (10 bytes) en un diccionario."""
+    #Convierte el payload de STATE (10 bytes) en un diccionario.
     ball_x, ball_y, p1, p2 = struct.unpack(">HHHH", payload[:8])
     score1, score2 = payload[8], payload[9]
     return {

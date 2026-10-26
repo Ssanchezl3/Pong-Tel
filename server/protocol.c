@@ -1,4 +1,4 @@
-/* protocol.c - Codec binario: convierte mensajes <-> bytes en el socket.
+/* Codec binario: convierte mensajes <-> bytes en el socket.
  * Usa cabecera de 3 bytes: [type:1][length:2 big-endian][payload]. */
 #include "protocol.h"
 #include <unistd.h>
@@ -25,7 +25,8 @@ static int recv_all(int fd, uint8_t *buf, int n) {
     }
     return 0;
 }
-
+// Envia un mensaje del protocolo por el socket 'fd': cabecera de 3 bytes
+// [type][length big-endian] seguida del payload. Devuelve 0 en exito o -1 si falla.
 int proto_send(int fd, uint8_t type, const uint8_t *payload, uint16_t length) {
     uint8_t header[3];
     header[0] = type;
@@ -35,7 +36,8 @@ int proto_send(int fd, uint8_t type, const uint8_t *payload, uint16_t length) {
     if (length > 0 && send_all(fd, payload, length) < 0) return -1;
     return 0;
 }
-
+// Recibe un mensaje del socket 'fd' en 'msg': lee la cabecera de 3 bytes,
+// reconstruye la longitud y luego el payload. Devuelve 0 en exito o -1 si falla.
 int proto_recv(int fd, Message *msg) {
     uint8_t header[3];
     if (recv_all(fd, header, 3) < 0) return -1;

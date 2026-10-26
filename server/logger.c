@@ -1,4 +1,4 @@
-/* logger.c - Imprime eventos en consola y en un archivo, con marca de tiempo.
+/*Imprime eventos en consola y en un archivo, con marca de tiempo.
  * Usa un mutex para que varios hilos no mezclen sus lineas. */
 #include "logger.h"
 #include <stdio.h>
@@ -8,12 +8,14 @@
 
 static FILE *log_file = NULL;
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-
+// Abre el archivo de log en modo "append" (agrega al final sin borrar lo previo).
+// Devuelve 0 si se abrio correctamente, o -1 si fallo.
 int log_init(const char *filename) {
     log_file = fopen(filename, "a");
     return (log_file == NULL) ? -1 : 0;
 }
-
+// Registra un mensaje con marca de tiempo en consola y en el archivo de log.
+// Acepta formato tipo printf y es seguro entre hilos (protegido por 'lock').
 void log_msg(const char *fmt, ...) {
     pthread_mutex_lock(&lock);
 

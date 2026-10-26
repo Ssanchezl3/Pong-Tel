@@ -1,11 +1,12 @@
-/* game.c - Reglas de Pong: movimiento de paletas, rebotes y puntaje. */
+/* Reglas de Pong: movimiento de paletas, rebotes y puntaje. */
 #include "game.h"
 #include "protocol.h"  /* BOARD_W, BOARD_H, INPUT_UP, INPUT_DOWN */
 
 #define PADDLE_SPEED 8
 #define PADDLE_X1 20             /* X fija de la paleta izquierda */
 #define PADDLE_X2 (BOARD_W - 20) /* X fija de la paleta derecha */
-
+// Inicializa el estado de la partida: pelota al centro con velocidad inicial,
+// paletas centradas, marcador en 0 y partida activa.
 void game_init(Game *g) {
     g->ball_x = BOARD_W / 2;
     g->ball_y = BOARD_H / 2;
@@ -48,7 +49,8 @@ static int hits_paddle(Game *g, int paddle_y) {
     return g->ball_y >= paddle_y - PADDLE_H / 2 &&
            g->ball_y <= paddle_y + PADDLE_H / 2;
 }
-
+// Avanza la simulacion un frame: mueve paletas y pelota, resuelve rebotes,
+// anota puntos cuando la pelota sale y decide si la partida termino.
 void game_step(Game *g) {
     if (g->over) return;
 

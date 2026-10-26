@@ -1,10 +1,7 @@
-"""client.py - Punto de entrada del cliente Pong.
-
-Uso:
-    python client.py <host> <puerto>
-
+"""Punto de entrada del cliente Pong.
+Uso: python client.py <host> <puerto>
 Pide nickname y email, se registra en el servidor y abre la ventana del juego.
-Funciona en Windows y Mac (solo requiere Python 3, Tkinter ya viene incluido).
+(solo requiere Python 3, Tkinter ya viene incluido).
 """
 import sys
 import protocol

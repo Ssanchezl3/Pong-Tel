@@ -1,4 +1,4 @@
-/* game.h - Logica pura del juego Pong (sin sockets ni hilos). */
+/*Logica pura del juego Pong (sin sockets ni hilos). */
 #ifndef GAME_H
 #define GAME_H
 

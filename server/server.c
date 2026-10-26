@@ -97,7 +97,7 @@ static void *match_thread(void *arg) {
         if (proto_send(m->p2.fd, MSG_STATE, state, 10) < 0) break;
         usleep(TICK_US);
     }
-
+    //Partida terminada: avisa el ganador a ambos jugadores y lo registra
     if (m->game.over) {
         uint8_t w = (uint8_t)m->game.winner;
         proto_send(m->p1.fd, MSG_GAMEOVER, &w, 1);
@@ -158,9 +158,10 @@ static void handle_new_client(int fd, struct sockaddr_in *addr) {
     }
 }
 
-/* Argumento para el hilo que recibe a un cliente. */
+/* Argumento para el hilo que recibe a un cliente. (socket y direccion) */
 typedef struct { int fd; struct sockaddr_in addr; } ClientArg;
 
+//Punto de entrada del hilo: atiende al cliente y libera su ClientArg al terminar
 static void *client_thread(void *arg) {
     ClientArg *ca = (ClientArg *)arg;
     handle_new_client(ca->fd, &ca->addr);
@@ -169,12 +170,14 @@ static void *client_thread(void *arg) {
 }
 
 int main(int argc, char *argv[]) {
+    //Verifica los argumentos: puerto y archivo de log
     if (argc != 3) {
         fprintf(stderr, "Uso: %s <PORT> <LogFile>\n", argv[0]);
         return 1;
     }
+    //puerto de escucha
     int port = atoi(argv[1]);
-
+    //Abre el archivo de log; aborta si falla
     if (log_init(argv[2]) < 0) {
         fprintf(stderr, "No se pudo abrir el archivo de log: %s\n", argv[2]);
         return 1;
